@@ -153,22 +153,21 @@
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // !!! THAY THẾ ĐOẠN NÀY BẰNG CONFIG CỦA BẠN !!!
-       // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyB5JH9LUptvUBH26H0Op_JKF3EWtQd4KNA",
-    authDomain: "myportal-2ff0b.firebaseapp.com",
-    projectId: "myportal-2ff0b",
-    storageBucket: "myportal-2ff0b.firebasestorage.app",
-    messagingSenderId: "171615684683",
-    appId: "1:171615684683:web:ba4d1e3effa707defba5ce",
-    measurementId: "G-37Y3SETGYT"
-  };
+        const firebaseConfig = {
+            apiKey: "AIzaSy...", 
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "0000000000",
+            appId: "1:0000000000:web:0000000000"
+        };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+        // Khởi tạo
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const appsRef = ref(db, 'apps');
+
         let isAdmin = false;
 
         // 1. Xử lý Đăng nhập (Admin/admin123)
