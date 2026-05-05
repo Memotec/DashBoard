@@ -3,166 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Cloud Portal | Premium v2</title>
+    <title>Responsive Enterprise Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #0f172a;
-            --sidebar-hover: #1e293b;
-            --accent: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --danger: #ff4757;
-            --success: #2ed573;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --sidebar-bg: #0f172a; --accent: #3b82f6;
+            --danger: #ff4757; --success: #2ed573;
+            --text-main: #f8fafc; --text-muted: #94a3b8;
             --bg-main: #f1f5f9;
-            --glass: rgba(255, 255, 255, 0.03);
         }
 
-        * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        * { box-sizing: border-box; transition: all 0.2s ease; }
         
         body { 
-            margin: 0; display: flex; height: 100vh; 
+            margin: 0; display: flex; height: 100vh; width: 100vw;
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg-main); overflow: hidden; 
         }
 
-        /* Sidebar - Sang trọng hơn */
+        /* Nút Menu cho Mobile */
+        .menu-toggle {
+            display: none; position: fixed; top: 15px; left: 15px;
+            z-index: 100; background: var(--sidebar-bg); color: white;
+            border: none; padding: 10px; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Sidebar - Đáp ứng linh hoạt */
         .sidebar { 
-            width: 300px; 
-            background: var(--sidebar-bg); 
-            color: var(--text-main); 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
-            z-index: 10;
+            width: 300px; min-width: 300px;
+            background: var(--sidebar-bg); color: var(--text-main); 
+            display: flex; flex-direction: column; z-index: 90;
         }
 
-        .sidebar-header { 
-            padding: 40px 25px; 
-            text-align: left;
-        }
+        .sidebar-header { padding: 30px 20px; text-align: center; }
+        .sidebar-header h2 { margin: 0; font-size: 1.2rem; color: var(--accent); }
 
-        .sidebar-header h2 { 
-            margin: 0; font-size: 1.4rem; font-weight: 700; 
-            letter-spacing: -0.5px; color: #fff;
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        .sidebar-header h2::before {
-            content: ''; width: 12px; height: 12px; 
-            background: var(--accent); border-radius: 3px;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        /* Auth Section - Bo góc hiện đại */
-        .user-box { 
-            padding: 20px; margin: 0 20px 20px; 
-            background: var(--glass); 
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-        }
-
-        .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .status-dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
-        #current-user { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
-
-        #auth-btn {
+        .user-box { padding: 15px; margin: 0 15px 15px; background: rgba(255,255,255,0.05); border-radius: 12px; }
+        #auth-btn { 
             width: 100%; background: var(--accent); color: white; border: none;
-            padding: 12px; border-radius: 10px; cursor: pointer; 
-            font-size: 0.9rem; font-weight: 600; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-        #auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); }
-
-        /* Admin Form - Giao diện nhập liệu sạch sẽ */
-        .admin-panel { 
-            margin: 0 20px 25px; padding: 20px; 
-            background: rgba(0,0,0,0.2); border-radius: 16px;
-            display: none; border: 1px solid rgba(255,255,255,0.05);
+            padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px;
         }
 
-        .admin-panel input { 
-            width: 100%; padding: 12px; margin-bottom: 12px; 
-            border-radius: 10px; border: 1px solid #334155; 
-            background: #0f172a; color: white; font-size: 0.85rem;
-        }
+        .admin-panel { margin: 0 15px 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; display: none; }
+        .admin-panel input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; }
+        .admin-panel button { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        .admin-panel input:focus { border-color: var(--accent); outline: none; background: #1e293b; }
+        .nav-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
+        .app-item { display: flex; align-items: center; margin-bottom: 5px; border-radius: 10px; }
+        .app-item:hover { background: #1e293b; }
+        .nav-btn { flex-grow: 1; padding: 12px; border: none; background: none; color: var(--text-muted); text-align: left; cursor: pointer; }
+        .app-item:hover .nav-btn { color: white; }
+        .delete-btn { color: var(--danger); border: none; background: none; cursor: pointer; font-size: 1.2rem; padding: 0 15px; display: none; }
 
-        .admin-panel button { 
-            width: 100%; padding: 12px; background: var(--success); 
-            color: white; border: none; cursor: pointer; border-radius: 10px; font-weight: 700;
-        }
-
-        /* App List - Hiệu ứng Hover mượt */
-        .nav-list { flex-grow: 1; overflow-y: auto; padding: 0 20px 20px; }
-        .label { font-size: 0.7rem; color: var(--text-muted); font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.6; }
-
-        .app-item { 
-            display: flex; align-items: center; margin-bottom: 8px; 
-            border-radius: 12px; position: relative;
-        }
-        .app-item:hover { background: var(--sidebar-hover); transform: translateX(5px); }
-
-        .nav-btn { 
-            flex-grow: 1; padding: 14px 15px; border: none; background: none; 
-            color: var(--text-muted); text-align: left; cursor: pointer; font-size: 0.95rem; font-weight: 500;
-        }
-        .app-item:hover .nav-btn { color: #fff; }
-
-        .delete-btn { 
-            color: var(--danger); border: none; background: none; 
-            cursor: pointer; font-size: 1.2rem; padding: 0 15px; display: none;
-            opacity: 0.5;
-        }
-        .delete-btn:hover { opacity: 1; color: #ff6b81; }
-
-        /* Main Content - Cửa sổ trình duyệt */
-        .main-view { flex-grow: 1; background: #fff; position: relative; border-radius: 30px 0 0 30px; margin-left: -20px; overflow: hidden; box-shadow: -15px 0 40px rgba(0,0,0,0.1); }
+        /* Main View - Tự co giãn theo Sidebar */
+        .main-view { flex-grow: 1; background: #fff; position: relative; width: 100%; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Empty state */
+        /* Welcome Screen */
         .welcome-screen {
             position: absolute; inset: 0; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; background: #fff; color: #1e293b;
+            align-items: center; justify-content: center; background: white; text-align: center; padding: 20px;
         }
-        .welcome-screen h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; background: linear-gradient(to right, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ----- MEDIA QUERIES: ĐIỀU CHỈNH CHO MOBILE ----- */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; } /* Hiện nút Menu */
+
+            .sidebar {
+                position: fixed; left: -300px; top: 0; bottom: 0;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            /* Khi Sidebar được mở trên Mobile */
+            .sidebar.active { transform: translateX(300px); }
+
+            .main-view { border-radius: 0; }
+            
+            .welcome-screen h1 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
+    <!-- Nút mở Menu cho điện thoại -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>MY PORTAL</h2>
         </div>
         
         <div class="user-box">
-            <div class="user-info">
-                <span class="status-dot"></span>
-                <span id="current-user">Guest Session</span>
-            </div>
+            <div style="font-size: 0.8rem;"><span id="current-user">Guest Session</span></div>
             <button id="auth-btn" onclick="toggleLogin()">Admin Console</button>
         </div>
 
         <div id="admin-panel" class="admin-panel">
-            <input type="text" id="app-name" placeholder="Application Name">
-            <input type="text" id="app-url" placeholder="Endpoint URL (https://)">
-            <button onclick="addApp()">🚀 Deploy App</button>
+            <input type="text" id="app-name" placeholder="Tên ứng dụng">
+            <input type="text" id="app-url" placeholder="URL (https://)">
+            <button onclick="addApp()">Deploy App</button>
         </div>
 
         <div class="nav-list">
-            <div class="label">Available Services</div>
-            <div id="app-list">
-                <!-- Data from Firebase -->
-            </div>
+            <div id="app-list"></div>
         </div>
     </aside>
 
     <main class="main-view">
         <div id="welcome" class="welcome-screen">
             <h1>Workspace</h1>
-            <p style="color: #64748b;">Vui lòng chọn ứng dụng từ menu để bắt đầu</p>
+            <p>Chọn ứng dụng để bắt đầu</p>
         </div>
         <iframe id="main-frame" name="app-viewport"></iframe>
     </main>
@@ -171,7 +122,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // GIỮ NGUYÊN CONFIG CỦA BẠN
         const firebaseConfig = {
             apiKey: "AIzaSyB5JH9LUptvUBH26H0Op_JKF3EWtQd4KNA",
             authDomain: "myportal-2ff0b.firebaseapp.com",
@@ -189,26 +139,29 @@
 
         let isAdmin = false;
 
-        // Logic Đăng nhập
+        // Đóng/Mở Sidebar trên Mobile
+        window.toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        };
+
         window.toggleLogin = () => {
             if (!isAdmin) {
-                const pass = prompt("Enter Master Key:");
+                const pass = prompt("Master Key:");
                 if (pass === "admin123") {
                     isAdmin = true;
-                    document.getElementById('current-user').innerText = "System Admin";
-                    document.getElementById('auth-btn').innerText = "Exit Admin";
+                    document.getElementById('current-user').innerText = "Admin Access";
+                    document.getElementById('auth-btn').innerText = "Logout";
                     document.getElementById('admin-panel').style.display = "block";
-                } else { alert("Access Denied!"); }
+                }
             } else {
                 isAdmin = false;
                 document.getElementById('current-user').innerText = "Guest Session";
-                document.getElementById('auth-btn').innerText = "Admin Console";
+                document.getElementById('auth-btn').innerText = "Admin Login";
                 document.getElementById('admin-panel').style.display = "none";
             }
-            renderUIStatus();
+            renderUI();
         };
 
-        // Logic thêm App
         window.addApp = () => {
             const name = document.getElementById('app-name').value;
             const url = document.getElementById('app-url').value;
@@ -219,27 +172,28 @@
             }
         };
 
-        // Logic xóa App
         window.deleteApp = (id) => {
-            if(confirm("Xóa dịch vụ này khỏi hệ thống?")) {
-                remove(ref(db, 'apps/' + id));
-            }
+            if(confirm("Xóa ứng dụng này?")) remove(ref(db, 'apps/' + id));
         };
 
-        // Đồng bộ dữ liệu Realtime
+        window.openApp = (url) => {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('main-frame').src = url;
+            // Tự động đóng sidebar sau khi chọn app trên mobile
+            if (window.innerWidth <= 768) toggleSidebar();
+        };
+
         onValue(appsRef, (snapshot) => {
             const data = snapshot.val();
             const list = document.getElementById('app-list');
             list.innerHTML = "";
             if (data) {
                 Object.keys(data).forEach(key => {
-                    const appData = data[key];
+                    const item = data[key];
                     const div = document.createElement('div');
                     div.className = 'app-item';
                     div.innerHTML = `
-                        <button class="nav-btn" onclick="openApp('${appData.url}')">
-                            ${appData.name}
-                        </button>
+                        <button class="nav-btn" onclick="openApp('${item.url}')">${item.name}</button>
                         <button class="delete-btn" onclick="deleteApp('${key}')" style="display: ${isAdmin ? 'block' : 'none'}">×</button>
                     `;
                     list.appendChild(div);
@@ -247,15 +201,8 @@
             }
         });
 
-        window.openApp = (url) => {
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('main-frame').src = url;
-        };
-
-        function renderUIStatus() {
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.style.display = isAdmin ? 'block' : 'none';
-            });
+        function renderUI() {
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = isAdmin ? 'block' : 'none');
         }
     </script>
 </body>
