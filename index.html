@@ -3,165 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Cloud Portal | Ultra Vivid</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>My Portal | Clean Light Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f111a;
-            --sidebar-bg: #161925;
-            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-            --accent-solid: #8b5cf6;
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --danger: #ff4757;
+            --bg-body: #f9fafb;
+            --bg-card: #ffffff;
+            --primary: #2563eb;
+            --primary-soft: #eff6ff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --border: #e5e7eb;
+            --danger: #ef4444;
         }
 
-        * { box-sizing: border-box; transition: all 0.3s ease; }
+        * { box-sizing: border-box; transition: all 0.2s ease; }
         
         body { 
-            margin: 0; display: flex; height: 100vh; width: 100vw;
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg-dark); overflow: hidden; color: var(--text-main);
+            margin: 0; font-family: 'Inter', sans-serif; 
+            background: var(--bg-body); color: var(--text-main);
+            display: flex; height: 100vh; flex-direction: column;
         }
 
-        /* Sidebar - Gọn gàng hơn */
-        .sidebar { 
-            width: 280px; min-width: 280px;
-            background: var(--sidebar-bg); 
-            display: flex; flex-direction: column; 
-            border-right: 1px solid rgba(255,255,255,0.05);
-            z-index: 100;
+        /* Top Header Gọn Gàng */
+        header {
+            background: var(--bg-card); padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border); z-index: 10;
         }
 
-        .sidebar-header { padding: 30px 25px; }
-        .sidebar-header h2 { 
-            margin: 0; font-size: 1.5rem; font-weight: 800; 
-            background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        header h1 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--primary); }
 
-        /* User & Admin */
-        .user-panel { padding: 20px; margin: 0 15px 20px; background: var(--card-bg); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .header-actions { display: flex; gap: 12px; align-items: center; }
         #auth-btn {
-            width: 100%; background: var(--accent-gradient); color: white; border: none;
-            padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 700;
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+            background: var(--primary-soft); color: var(--primary); border: none;
+            padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer;
+            font-size: 0.85rem;
         }
-        #auth-btn:hover { transform: scale(1.02); box-shadow: 0 15px 25px rgba(139, 92, 246, 0.4); }
+        #auth-btn:hover { background: var(--primary); color: white; }
 
-        .admin-form { margin: 0 15px 20px; display: none; }
-        .admin-form input { 
-            width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px;
-            border: 1px solid #334155; background: #000; color: white;
-        }
+        /* Main Layout */
+        main { flex: 1; overflow-y: auto; position: relative; }
 
-        /* Workspace Area */
-        .main-workspace { flex-grow: 1; position: relative; display: flex; flex-direction: column; }
-        
-        iframe { width: 100%; height: 100%; border: none; display: none; background: #fff; }
-
-        /* Welcome Screen với lưới ứng dụng */
-        #welcome-view {
-            flex-grow: 1; overflow-y: auto; padding: 60px 40px;
-            display: flex; flex-direction: column; align-items: center;
+        /* Workspace: Lưới ứng dụng */
+        #workspace-home {
+            max-width: 1200px; margin: 40px auto; padding: 0 20px;
+            text-align: center;
         }
 
-        .welcome-header { text-align: center; margin-bottom: 50px; }
-        .welcome-header h1 { font-size: 3rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
-        .welcome-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .welcome-text h2 { font-size: 2rem; margin-bottom: 8px; font-weight: 800; }
+        .welcome-text p { color: var(--text-sub); margin-bottom: 40px; }
 
-        /* Lưới ứng dụng ở Workspace */
         .app-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px; width: 100%; max-width: 1100px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
         }
 
         .app-card {
-            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
-            padding: 30px 20px; border-radius: 24px; text-align: center;
-            cursor: pointer; position: relative; overflow: hidden;
+            background: var(--bg-card); border: 1px solid var(--border);
+            padding: 25px 15px; border-radius: 16px; cursor: pointer;
+            position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .app-card:hover {
-            background: rgba(255,255,255,0.08); transform: translateY(-10px);
-            border-color: var(--accent-solid);
+        .app-card:hover { 
+            transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border-color: var(--primary);
         }
-        .app-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--accent-gradient);
+        .app-icon {
+            width: 48px; height: 48px; background: var(--primary-soft);
+            color: var(--primary); border-radius: 12px; margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 700;
         }
-        .app-icon { 
-            width: 60px; height: 60px; background: rgba(139, 92, 246, 0.2); 
-            border-radius: 18px; margin: 0 auto 15px; display: flex; 
-            align-items: center; justify-content: center; font-size: 24px; color: var(--accent-solid);
-        }
-        .app-card h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .app-name { font-weight: 600; font-size: 0.95rem; }
 
-        .app-card .delete-btn {
-            position: absolute; top: 10px; right: 10px; background: var(--danger);
-            color: white; border: none; border-radius: 50%; width: 25px; height: 25px;
-            cursor: pointer; display: none; font-weight: bold;
+        /* Nút xóa nhỏ gọn */
+        .del-btn {
+            position: absolute; top: 8px; right: 8px; background: #fee2e2;
+            color: var(--danger); border: none; width: 24px; height: 24px;
+            border-radius: 50%; cursor: pointer; display: none; font-size: 14px;
         }
 
-        /* Sidebar Navigation (Dạng rút gọn) */
-        .side-nav { padding: 10px 20px; }
-        .side-item { 
-            padding: 12px 15px; margin-bottom: 5px; border-radius: 10px; 
-            cursor: pointer; color: var(--text-muted); font-size: 0.9rem;
+        /* Admin Panel Modal-like */
+        #admin-panel {
+            background: var(--bg-card); padding: 15px; border-radius: 12px;
+            border: 1px solid var(--border); margin: 20px auto; max-width: 600px;
+            display: none; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-        .side-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .admin-form { display: flex; gap: 10px; flex-wrap: wrap; }
+        .admin-form input { 
+            flex: 1; min-width: 150px; padding: 10px; border: 1px solid var(--border);
+            border-radius: 8px; outline: none;
+        }
+        .admin-form button { 
+            background: var(--primary); color: white; border: none; 
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+        }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .sidebar { display: none; } /* Trên mobile ưu tiên Workspace */
-            .welcome-header h1 { font-size: 2rem; }
+        /* Iframe View */
+        #iframe-container { display: none; height: 100%; width: 100%; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .back-btn {
+            position: absolute; top: 15px; left: 15px; background: white;
+            padding: 8px 15px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer; border: 1px solid var(--border); font-weight: 600; z-index: 20;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 640px) {
+            .app-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .welcome-text h2 { font-size: 1.5rem; }
+            header { padding: 10px 15px; }
+            .admin-form { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>MY PORTAL</h2>
+    <header>
+        <h1>MY PORTAL</h1>
+        <div class="header-actions">
+            <span id="user-tag" style="font-size: 0.8rem; color: var(--text-sub);">Guest</span>
+            <button id="auth-btn" onclick="toggleLogin()">Admin</button>
         </div>
-        
-        <div class="user-panel">
-            <div style="font-size: 0.8rem; margin-bottom: 10px; color: var(--text-muted);">
-                Trạng thái: <span id="current-user" style="color: var(--success);">Guest</span>
+    </header>
+
+    <main>
+        <!-- Admin Panel -->
+        <div id="admin-panel">
+            <div class="admin-form">
+                <input type="text" id="app-name" placeholder="Tên app...">
+                <input type="text" id="app-url" placeholder="https://...">
+                <button onclick="addApp()">Thêm mới</button>
             </div>
-            <button id="auth-btn" onclick="toggleLogin()">Admin Login</button>
         </div>
 
-        <div id="admin-panel" class="admin-form">
-            <input type="text" id="app-name" placeholder="Tên dịch vụ">
-            <input type="text" id="app-url" placeholder="URL (https://)">
-            <button id="auth-btn" style="background: var(--accent-solid);" onclick="addApp()">+ Thêm ứng dụng</button>
-        </div>
-
-        <div class="side-nav" id="side-list">
-            <div style="font-size: 0.7rem; font-weight: 800; color: #444; margin-bottom: 10px;">TRUY CẬP NHANH</div>
-            <!-- Danh sách phụ hiện ở đây -->
-        </div>
-    </aside>
-
-    <main class="main-workspace">
-        <div id="welcome-view">
-            <div class="welcome-header">
-                <h1>DASHBOARD</h1>
-                <p>Chọn ứng dụng bạn muốn làm việc hôm nay</p>
+        <!-- Dashboard Home -->
+        <div id="workspace-home">
+            <div class="welcome-text">
+                <h2 id="greet-text">Chào buổi sáng!</h2>
+                <p>Truy cập nhanh các ứng dụng của bạn bên dưới.</p>
             </div>
-
             <div class="app-grid" id="app-grid">
-                <!-- Danh sách chính hiển thị dạng Card ở đây -->
+                <!-- Apps load từ Firebase -->
             </div>
         </div>
 
-        <iframe id="main-frame" name="app-viewport"></iframe>
+        <!-- App Viewer -->
+        <div id="iframe-container">
+            <button class="back-btn" onclick="closeApp()">← Quay lại</button>
+            <iframe id="main-frame"></iframe>
+        </div>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // FIREBASE CONFIG CỦA BẠN
         const firebaseConfig = {
             apiKey: "AIzaSyB5JH9LUptvUBH26H0Op_JKF3EWtQd4KNA",
             authDomain: "myportal-2ff0b.firebaseapp.com",
@@ -181,18 +179,18 @@
 
         window.toggleLogin = () => {
             if (!isAdmin) {
-                const pass = prompt("Admin Key:");
+                const pass = prompt("Nhập mã Admin:");
                 if (pass === "admin123") {
                     isAdmin = true;
-                    document.getElementById('current-user').innerText = "Administrator";
-                    document.getElementById('auth-btn').innerText = "Logout Admin";
+                    document.getElementById('user-tag').innerText = "Administrator";
                     document.getElementById('admin-panel').style.display = "block";
+                    document.getElementById('auth-btn').innerText = "Thoát";
                 }
             } else {
                 isAdmin = false;
-                document.getElementById('current-user').innerText = "Guest";
-                document.getElementById('auth-btn').innerText = "Admin Login";
+                document.getElementById('user-tag').innerText = "Guest";
                 document.getElementById('admin-panel').style.display = "none";
+                document.getElementById('auth-btn').innerText = "Admin";
             }
             renderApps();
         };
@@ -208,50 +206,46 @@
         };
 
         window.deleteApp = (e, id) => {
-            e.stopPropagation(); // Ngăn việc mở app khi nhấn xóa
+            e.stopPropagation();
             if(confirm("Xóa ứng dụng này?")) remove(ref(db, 'apps/' + id));
         };
 
         window.openApp = (url) => {
-            document.getElementById('welcome-view').style.display = 'none';
-            const frame = document.getElementById('main-frame');
-            frame.style.display = 'block';
-            frame.src = url;
+            document.getElementById('workspace-home').style.display = 'none';
+            document.getElementById('iframe-container').style.display = 'block';
+            document.getElementById('main-frame').src = url;
         };
 
-        // Đồng bộ dữ liệu hiển thị cả 2 nơi: Sidebar và Workspace Grid
+        window.closeApp = () => {
+            document.getElementById('workspace-home').style.display = 'block';
+            document.getElementById('iframe-container').style.display = 'none';
+            document.getElementById('main-frame').src = '';
+        };
+
         onValue(appsRef, (snapshot) => {
             const data = snapshot.val();
             const grid = document.getElementById('app-grid');
-            const sideList = document.getElementById('side-list');
-            
             grid.innerHTML = "";
-            sideList.innerHTML = `<div style="font-size: 0.7rem; font-weight: 800; color: #444; margin-bottom: 10px;">TRUY CẬP NHANH</div>`;
-
             if (data) {
                 Object.keys(data).forEach(key => {
                     const item = data[key];
-                    
-                    // Thêm vào Workspace Grid
                     const card = document.createElement('div');
                     card.className = 'app-card';
                     card.onclick = () => openApp(item.url);
                     card.innerHTML = `
-                        <button class="delete-btn" onclick="deleteApp(event, '${key}')" style="display: ${isAdmin ? 'block' : 'none'}">×</button>
-                        <div class="app-icon">${item.name.charAt(0).toUpperCase()}</div>
-                        <h3>${item.name}</h3>
+                        <button class="del-btn" onclick="deleteApp(event, '${key}')" style="display: ${isAdmin ? 'block' : 'none'}">×</button>
+                        <div class="app-icon">${item.name.charAt(0)}</div>
+                        <div class="app-name">${item.name}</div>
                     `;
                     grid.appendChild(card);
-
-                    // Thêm vào Sidebar phụ
-                    const sideItem = document.createElement('div');
-                    sideItem.className = 'side-item';
-                    sideItem.innerText = item.name;
-                    sideItem.onclick = () => openApp(item.url);
-                    sideList.appendChild(sideItem);
                 });
             }
         });
+
+        // Tự động thay đổi lời chào theo giờ
+        const hour = new Date().getHours();
+        const greet = hour < 12 ? "Chào buổi sáng!" : hour < 18 ? "Chào buổi chiều!" : "Chào buổi tối!";
+        document.getElementById('greet-text').innerText = greet;
     </script>
 </body>
 </html>
