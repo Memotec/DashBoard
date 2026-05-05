@@ -2,118 +2,170 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Enterprise Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Enterprise Cloud Portal | Professional Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #0f172a; --accent: #3b82f6;
-            --danger: #ff4757; --success: #2ed573;
-            --text-main: #f8fafc; --text-muted: #94a3b8;
+            --sidebar-bg: #0f172a;
+            --sidebar-hover: #1e293b;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --danger: #ef4444;
+            --success: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --bg-main: #f1f5f9;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
         
         body { 
             margin: 0; display: flex; height: 100vh; width: 100vw;
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg-main); overflow: hidden; 
+            background: var(--bg-main); overflow: hidden; color: #1e293b;
         }
 
-        /* Nút Menu cho Mobile */
-        .menu-toggle {
-            display: none; position: fixed; top: 15px; left: 15px;
-            z-index: 100; background: var(--sidebar-bg); color: white;
-            border: none; padding: 10px; border-radius: 8px; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        /* Nút Menu Mobile */
+        .mobile-toggle {
+            display: none; position: fixed; bottom: 25px; right: 25px;
+            z-index: 999; background: var(--accent); color: white;
+            border: none; width: 56px; height: 56px; border-radius: 28px;
+            font-size: 24px; cursor: pointer; box-shadow: 0 8px 25px var(--accent-glow);
         }
 
-        /* Sidebar - Đáp ứng linh hoạt */
+        /* Sidebar Sidebar */
         .sidebar { 
-            width: 300px; min-width: 300px;
+            width: 320px; min-width: 320px;
             background: var(--sidebar-bg); color: var(--text-main); 
-            display: flex; flex-direction: column; z-index: 90;
+            display: flex; flex-direction: column; z-index: 100;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
 
-        .sidebar-header { padding: 30px 20px; text-align: center; }
-        .sidebar-header h2 { margin: 0; font-size: 1.2rem; color: var(--accent); }
+        .sidebar-header { padding: 40px 25px; }
+        .sidebar-header h2 { 
+            margin: 0; font-size: 1.4rem; font-weight: 700; color: #fff;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sidebar-header h2::before {
+            content: ''; width: 12px; height: 12px; background: var(--accent); 
+            border-radius: 3px; box-shadow: 0 0 15px var(--accent);
+        }
 
-        .user-box { padding: 15px; margin: 0 15px 15px; background: rgba(255,255,255,0.05); border-radius: 12px; }
-        #auth-btn { 
+        /* User & Auth Section */
+        .user-card { 
+            padding: 20px; margin: 0 20px 20px; 
+            background: rgba(255,255,255,0.03); border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .user-status { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 0.85rem; }
+        .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
+
+        #auth-btn {
             width: 100%; background: var(--accent); color: white; border: none;
-            padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 10px;
+            padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+        #auth-btn:hover { transform: translateY(-2px); background: #2563eb; }
+
+        /* Admin Control Panel */
+        .admin-panel { 
+            margin: 0 20px 25px; padding: 20px; 
+            background: rgba(0,0,0,0.2); border-radius: 16px; display: none;
+        }
+        .admin-panel input { 
+            width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px;
+            border: 1px solid #334155; background: #0f172a; color: white; outline: none;
+        }
+        .admin-panel input:focus { border-color: var(--accent); }
+        .admin-panel button { 
+            width: 100%; padding: 12px; background: var(--success); 
+            color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;
         }
 
-        .admin-panel { margin: 0 15px 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; display: none; }
-        .admin-panel input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; }
-        .admin-panel button { width: 100%; padding: 10px; background: var(--success); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        /* Application List */
+        .nav-list { flex-grow: 1; overflow-y: auto; padding: 0 20px 20px; }
+        .list-title { font-size: 0.7rem; color: var(--text-muted); font-weight: 800; margin-bottom: 15px; letter-spacing: 1.5px; opacity: 0.6; }
 
-        .nav-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
-        .app-item { display: flex; align-items: center; margin-bottom: 5px; border-radius: 10px; }
-        .app-item:hover { background: #1e293b; }
-        .nav-btn { flex-grow: 1; padding: 12px; border: none; background: none; color: var(--text-muted); text-align: left; cursor: pointer; }
-        .app-item:hover .nav-btn { color: white; }
+        .app-item { 
+            display: flex; align-items: center; margin-bottom: 8px; 
+            border-radius: 12px; position: relative;
+        }
+        .app-item:hover { background: var(--sidebar-hover); transform: translateX(5px); }
+
+        .nav-btn { 
+            flex-grow: 1; padding: 14px 15px; border: none; background: none; 
+            color: var(--text-muted); text-align: left; cursor: pointer; font-size: 0.95rem; font-weight: 500;
+        }
+        .app-item:hover .nav-btn { color: #fff; }
+
         .delete-btn { color: var(--danger); border: none; background: none; cursor: pointer; font-size: 1.2rem; padding: 0 15px; display: none; }
 
-        /* Main View - Tự co giãn theo Sidebar */
-        .main-view { flex-grow: 1; background: #fff; position: relative; width: 100%; }
+        /* Main Content Viewport */
+        .main-view { 
+            flex-grow: 1; background: #fff; position: relative; 
+            border-radius: 32px 0 0 32px; margin-left: -20px; overflow: hidden;
+            box-shadow: -15px 0 45px rgba(0,0,0,0.1);
+        }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Welcome Screen */
+        /* Welcome Overlay */
         .welcome-screen {
             position: absolute; inset: 0; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; background: white; text-align: center; padding: 20px;
+            align-items: center; justify-content: center; background: #fff; text-align: center; padding: 40px;
         }
+        .welcome-screen h1 { font-size: 2.5rem; margin-bottom: 12px; font-weight: 800; color: #0f172a; }
 
-        /* ----- MEDIA QUERIES: ĐIỀU CHỈNH CHO MOBILE ----- */
+        /* Mobile Adaptive Styles */
         @media (max-width: 768px) {
-            .menu-toggle { display: block; } /* Hiện nút Menu */
-
+            .mobile-toggle { display: block; }
             .sidebar {
-                position: fixed; left: -300px; top: 0; bottom: 0;
-                transition: transform 0.3s ease-in-out;
+                position: fixed; left: -320px; top: 0; bottom: 0;
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             }
-
-            /* Khi Sidebar được mở trên Mobile */
-            .sidebar.active { transform: translateX(300px); }
-
-            .main-view { border-radius: 0; }
-            
-            .welcome-screen h1 { font-size: 1.5rem; }
+            .sidebar.active { transform: translateX(320px); }
+            .main-view { border-radius: 0; margin-left: 0; }
+            .welcome-screen h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Nút mở Menu cho điện thoại -->
-    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+    <!-- Nút Floating Menu cho Di động -->
+    <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>MY PORTAL</h2>
         </div>
         
-        <div class="user-box">
-            <div style="font-size: 0.8rem;"><span id="current-user">Guest Session</span></div>
-            <button id="auth-btn" onclick="toggleLogin()">Admin Console</button>
+        <div class="user-card">
+            <div class="user-status">
+                <span class="dot"></span>
+                <span id="current-user">Guest Session</span>
+            </div>
+            <button id="auth-btn" onclick="toggleLogin()">System Access</button>
         </div>
 
         <div id="admin-panel" class="admin-panel">
-            <input type="text" id="app-name" placeholder="Tên ứng dụng">
-            <input type="text" id="app-url" placeholder="URL (https://)">
-            <button onclick="addApp()">Deploy App</button>
+            <input type="text" id="app-name" placeholder="Tên ứng dụng...">
+            <input type="text" id="app-url" placeholder="Link (https://...)">
+            <button onclick="addApp()">⚡ Deploy App</button>
         </div>
 
         <div class="nav-list">
-            <div id="app-list"></div>
+            <div class="list-title">MY WORKSPACE</div>
+            <div id="app-list">
+                <!-- Apps loaded from Firebase -->
+            </div>
         </div>
     </aside>
 
     <main class="main-view">
         <div id="welcome" class="welcome-screen">
-            <h1>Workspace</h1>
-            <p>Chọn ứng dụng để bắt đầu</p>
+            <div style="background: var(--bg-main); padding: 40px; border-radius: 50%; margin-bottom: 20px;">🌐</div>
+            <h1>Ready to Work</h1>
+            <p style="color: #64748b; max-width: 300px;">Hãy chọn một ứng dụng từ menu bên trái để bắt đầu phiên làm việc.</p>
         </div>
         <iframe id="main-frame" name="app-viewport"></iframe>
     </main>
@@ -122,6 +174,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
+        // GIỮ NGUYÊN FIREBASE CONFIG CỦA BẠN
         const firebaseConfig = {
             apiKey: "AIzaSyB5JH9LUptvUBH26H0Op_JKF3EWtQd4KNA",
             authDomain: "myportal-2ff0b.firebaseapp.com",
@@ -130,7 +183,7 @@
             messagingSenderId: "171615684683",
             appId: "1:171615684683:web:ba4d1e3effa707defba5ce",
             measurementId: "G-37Y3SETGYT",
-            databaseURL: "https://myportal-2ff0b-default-rtdb.asia-southeast1.firebasedatabase.app"
+            databaseURL: "https://myportal-2ff0b-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -139,29 +192,31 @@
 
         let isAdmin = false;
 
-        // Đóng/Mở Sidebar trên Mobile
+        // Xử lý Menu trên Di động
         window.toggleSidebar = () => {
             document.getElementById('sidebar').classList.toggle('active');
         };
 
+        // Logic Đăng nhập (Mật khẩu mặc định: admin123)
         window.toggleLogin = () => {
             if (!isAdmin) {
-                const pass = prompt("Master Key:");
+                const pass = prompt("Nhập mã bảo mật hệ thống:");
                 if (pass === "admin123") {
                     isAdmin = true;
-                    document.getElementById('current-user').innerText = "Admin Access";
-                    document.getElementById('auth-btn').innerText = "Logout";
+                    document.getElementById('current-user').innerText = "Administrator";
+                    document.getElementById('auth-btn').innerText = "Logout Console";
                     document.getElementById('admin-panel').style.display = "block";
-                }
+                } else { alert("Truy cập bị từ chối!"); }
             } else {
                 isAdmin = false;
                 document.getElementById('current-user').innerText = "Guest Session";
-                document.getElementById('auth-btn').innerText = "Admin Login";
+                document.getElementById('auth-btn').innerText = "System Access";
                 document.getElementById('admin-panel').style.display = "none";
             }
-            renderUI();
+            updateDeleteButtons();
         };
 
+        // Thêm Ứng dụng
         window.addApp = () => {
             const name = document.getElementById('app-name').value;
             const url = document.getElementById('app-url').value;
@@ -172,37 +227,44 @@
             }
         };
 
+        // Xóa Ứng dụng
         window.deleteApp = (id) => {
-            if(confirm("Xóa ứng dụng này?")) remove(ref(db, 'apps/' + id));
+            if(confirm("Xác nhận gỡ bỏ ứng dụng này khỏi Portal?")) {
+                remove(ref(db, 'apps/' + id));
+            }
         };
 
+        // Mở Ứng dụng
         window.openApp = (url) => {
             document.getElementById('welcome').style.display = 'none';
             document.getElementById('main-frame').src = url;
-            // Tự động đóng sidebar sau khi chọn app trên mobile
-            if (window.innerWidth <= 768) toggleSidebar();
+            if (window.innerWidth <= 768) toggleSidebar(); // Tự động đóng menu trên mobile
         };
 
+        // Lắng nghe dữ liệu thời gian thực
         onValue(appsRef, (snapshot) => {
             const data = snapshot.val();
             const list = document.getElementById('app-list');
             list.innerHTML = "";
             if (data) {
                 Object.keys(data).forEach(key => {
-                    const item = data[key];
+                    const appData = data[key];
                     const div = document.createElement('div');
                     div.className = 'app-item';
                     div.innerHTML = `
-                        <button class="nav-btn" onclick="openApp('${item.url}')">${item.name}</button>
-                        <button class="delete-btn" onclick="deleteApp('${key}')" style="display: ${isAdmin ? 'block' : 'none'}">×</button>
+                        <button class="nav-btn" onclick="openApp('${appData.url}')">${appData.name}</button>
+                        <button class="delete-btn" onclick="deleteApp('${key}')">×</button>
                     `;
                     list.appendChild(div);
                 });
+                updateDeleteButtons();
             }
         });
 
-        function renderUI() {
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = isAdmin ? 'block' : 'none');
+        function updateDeleteButtons() {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.style.display = isAdmin ? 'block' : 'none';
+            });
         }
     </script>
 </body>
