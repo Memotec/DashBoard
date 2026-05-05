@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Cloud Portal</title>
+    <title>Enterprise App Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,11 +18,11 @@
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
-        body { margin: 0; display: flex; height: 100vh; font-family: 'Inter', sans-serif; background: var(--bg-main); overflow: hidden; }
+        body { margin: 0; display: flex; height: 100vh; font-family: 'Inter', sans-serif; background: var(--bg-main); color: #334155; }
         
-        /* Sidebar */
+        /* Sidebar Chuyên nghiệp */
         .sidebar { 
-            width: 280px; 
+            width: 300px; 
             background: var(--sidebar-bg); 
             color: var(--text-main); 
             display: flex; 
@@ -32,240 +32,182 @@
         }
 
         .sidebar-header { 
-            padding: 25px 20px; 
+            padding: 30px 20px; 
             text-align: center; 
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .sidebar-header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; color: var(--accent); }
-
-        /* Auth Section */
-        .user-box { 
-            padding: 15px; 
-            margin: 15px; 
-            background: rgba(255,255,255,0.03); 
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
+        .sidebar-header h2 { 
+            margin: 0; font-size: 1.2rem; letter-spacing: 1px; font-weight: 600; color: var(--accent); 
         }
 
-        .user-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        #current-user { font-size: 0.75rem; color: var(--text-muted); }
+        /* Thông tin User & Auth */
+        .user-info { 
+            padding: 15px 20px; 
+            background: rgba(255,255,255,0.05); 
+            margin: 10px; 
+            border-radius: 12px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
 
+        .user-status { font-size: 0.85rem; font-weight: 500; }
+        
         #auth-btn {
-            width: 100%; background: var(--accent); color: white; border: none;
-            padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;
+            background: var(--accent); color: white; border: none;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;
         }
+
         #auth-btn:hover { background: var(--accent-hover); }
 
-        /* Admin Form */
-        .admin-panel { 
-            margin: 0 15px 15px 15px; padding: 15px; 
-            background: #1e293b; border-radius: 10px;
-            display: none; /* Ẩn mặc định */
+        /* Admin Panel Card */
+        .admin-controls { 
+            margin: 10px; padding: 15px; 
+            background: #1e293b; border-radius: 12px;
+            display: none; border: 1px solid #334155;
         }
 
-        .admin-panel input { 
-            width: 100%; padding: 8px 12px; margin-bottom: 10px; 
-            border-radius: 6px; border: 1px solid #334155; 
-            background: #0f172a; color: white; font-size: 0.85rem;
+        .admin-controls input { 
+            width: 100%; padding: 10px; margin-bottom: 10px; 
+            border-radius: 8px; border: 1px solid #334155; 
+            background: #0f172a; color: white; outline: none;
         }
 
-        .admin-panel button { 
-            width: 100%; padding: 8px; background: #10b981; 
-            color: white; border: none; cursor: pointer; border-radius: 6px; font-weight: 600;
+        .admin-controls input:focus { border-color: var(--accent); }
+
+        .admin-controls button { 
+            width: 100%; padding: 10px; background: #10b981; 
+            color: white; border: none; cursor: pointer; border-radius: 8px; font-weight: 600;
         }
 
         /* App List */
-        .nav-list { flex-grow: 1; overflow-y: auto; padding: 10px 15px; }
-        .label { font-size: 0.65rem; color: var(--text-muted); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-list { flex-grow: 1; overflow-y: auto; padding: 15px; }
+        .list-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
 
         .app-item { 
-            display: flex; align-items: center; margin-bottom: 5px; 
-            border-radius: 8px; overflow: hidden;
+            display: flex; align-items: center; margin-bottom: 8px; 
+            background: transparent; border-radius: 10px;
         }
+
         .app-item:hover { background: var(--sidebar-hover); }
 
         .nav-btn { 
-            flex-grow: 1; padding: 12px; border: none; background: none; 
-            color: var(--text-muted); text-align: left; cursor: pointer; font-size: 0.9rem;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            flex-grow: 1; padding: 12px 15px; border: none; background: none; 
+            color: var(--text-muted); text-align: left; cursor: pointer; font-size: 0.95rem;
         }
+
         .app-item:hover .nav-btn { color: white; }
 
         .delete-btn { 
             color: var(--danger); border: none; background: none; 
-            cursor: pointer; font-size: 1.1rem; padding: 0 15px; display: none;
+            cursor: pointer; font-size: 1.2rem; padding-right: 15px; display: none; opacity: 0.6;
         }
+        .delete-btn:hover { opacity: 1; transform: scale(1.2); }
 
-        /* Main View */
-        .main-view { flex-grow: 1; position: relative; background: white; }
-        iframe { width: 100%; height: 100%; border: none; background: white; }
-
-        /* Empty State */
-        .welcome-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: #f1f5f9; color: #64748b; text-align: center;
-        }
+        /* Khung hiển thị App chính */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; position: relative; }
+        
+        /* Hiệu ứng loading giả lập */
+        .iframe-container { width: 100%; height: 100%; background: #fff; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>CLOUD PORTAL</h2>
+            <h2>DASHBOARD PRO</h2>
         </div>
         
-        <div class="user-box">
-            <div class="user-info">
-                <span><span class="status-dot"></span><span id="current-user">Guest Mode</span></span>
-            </div>
-            <button id="auth-btn">Admin Login</button>
+        <div class="user-info">
+            <span class="user-status" id="current-user">Guest Access</span>
+            <button id="auth-btn" onclick="toggleLogin()">Login</button>
         </div>
 
-        <div id="admin-panel" class="admin-panel">
-            <input type="text" id="app-name" placeholder="Tên ứng dụng (VD: Google)">
-            <input type="text" id="app-url" placeholder="URL (https://...)">
-            <button id="add-btn">Deploy to Cloud</button>
+        <div id="admin-panel" class="admin-controls">
+            <input type="text" id="app-name" placeholder="App Name...">
+            <input type="text" id="app-url" placeholder="http://...">
+            <button onclick="addApp()">Deploy App</button>
         </div>
 
         <div class="nav-list">
-            <div class="label">Workspace Apps</div>
+            <div class="list-label">Available Applications</div>
             <div id="app-list">
-                <!-- Apps sẽ tự động đổ vào đây -->
-            </div>
+                </div>
         </div>
     </aside>
 
-    <main class="main-view">
-        <div id="welcome" class="welcome-screen">
-            <h1>Welcome</h1>
-            <p>Chọn một ứng dụng từ menu bên trái để bắt đầu</p>
+    <main class="main-content">
+        <div class="iframe-container">
+            <iframe id="main-frame" src="about:blank" name="app-viewport"></iframe>
         </div>
-        <iframe id="main-frame" name="app-viewport"></iframe>
     </main>
 
-    <script type="module">
-        // --- KẾT NỐI HỆ THỐNG FIREBASE ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // !!! THAY THẾ ĐOẠN NÀY BẰNG CONFIG CỦA BẠN !!!
-        const firebaseConfig = {
-            apiKey: "AIzaSy...", 
-            authDomain: "your-project.firebaseapp.com",
-            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "0000000000",
-            appId: "1:0000000000:web:0000000000"
-        };
-
-        // Khởi tạo
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const appsRef = ref(db, 'apps');
-
+    <script>
+        // --- LOGIC GIỮ NGUYÊN NHƯ BẢN TRƯỚC ---
         let isAdmin = false;
+        let apps = JSON.parse(localStorage.getItem('myApps')) || [
+            { name: "Google", url: "https://www.bing.com" } // Ví dụ mẫu
+        ];
 
-        // 1. Xử lý Đăng nhập (Admin/admin123)
-        const authBtn = document.getElementById('auth-btn');
-        authBtn.onclick = () => {
+        function init() { renderApps(); }
+
+        function toggleLogin() {
             if (!isAdmin) {
-                const user = prompt("Username:");
-                const pass = prompt("Password:");
-                if (user === "admin" && pass === "admin123") {
+                let user = prompt("User:");
+                let pass = prompt("Password:");
+                if (user === "admin" && pass === "admin") {
                     isAdmin = true;
                     document.getElementById('current-user').innerText = "Administrator";
-                    authBtn.innerText = "Logout";
+                    document.getElementById('auth-btn').innerText = "Logout";
                     document.getElementById('admin-panel').style.display = "block";
-                } else {
-                    alert("Sai thông tin đăng nhập!");
-                }
+                } else { alert("Access Denied!"); }
             } else {
                 isAdmin = false;
-                document.getElementById('current-user').innerText = "Guest Mode";
-                authBtn.innerText = "Admin Login";
+                document.getElementById('current-user').innerText = "Guest Access";
+                document.getElementById('auth-btn').innerText = "Login";
                 document.getElementById('admin-panel').style.display = "none";
             }
-            renderUI(); // Cập nhật lại giao diện (ẩn hiện nút xóa)
-        };
+            renderApps();
+        }
 
-        // 2. Thêm App lên Cloud
-        document.getElementById('add-btn').onclick = () => {
+        function addApp() {
             const name = document.getElementById('app-name').value;
-            let url = document.getElementById('app-url').value;
-
+            const url = document.getElementById('app-url').value;
             if (name && url) {
-                // Tự động thêm https nếu người dùng quên
-                if (!url.startsWith('http')) url = 'https://' + url;
-                
-                push(appsRef, { name, url });
-                
+                apps.push({ name, url });
+                localStorage.setItem('myApps', JSON.stringify(apps));
+                renderApps();
                 document.getElementById('app-name').value = '';
                 document.getElementById('app-url').value = '';
-            } else {
-                alert("Vui lòng nhập đủ tên và URL");
             }
-        };
-
-        // 3. Lắng nghe dữ liệu Realtime (Đồng bộ giữa các máy)
-        onValue(appsRef, (snapshot) => {
-            const data = snapshot.val();
-            const listContainer = document.getElementById('app-list');
-            listContainer.innerHTML = ""; // Xóa danh sách cũ để vẽ lại
-
-            if (data) {
-                Object.keys(data).forEach(key => {
-                    const appData = data[key];
-                    const appDiv = document.createElement('div');
-                    appDiv.className = 'app-item';
-                    
-                    appDiv.innerHTML = `
-                        <button class="nav-btn" data-url="${appData.url}">
-                            ● &nbsp; ${appData.name}
-                        </button>
-                        <button class="delete-btn" data-id="${key}">×</button>
-                    `;
-                    
-                    listContainer.appendChild(appDiv);
-                });
-
-                // Gán sự kiện Click cho các nút vừa tạo
-                attachEvents();
-            }
-        });
-
-        function attachEvents() {
-            // Sự kiện mở App
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.onclick = () => {
-                    document.getElementById('welcome').style.display = 'none';
-                    document.getElementById('main-frame').src = btn.dataset.url;
-                };
-            });
-
-            // Sự kiện xóa App (Chỉ Admin thấy)
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.style.display = isAdmin ? 'block' : 'none';
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    if (confirm("Xác nhận gỡ bỏ ứng dụng này khỏi hệ thống?")) {
-                        const id = btn.dataset.id;
-                        remove(ref(db, 'apps/' + id));
-                    }
-                };
-            });
         }
 
-        function renderUI() {
-            // Cập nhật trạng thái hiển thị của các nút xóa khi login/logout
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.style.display = isAdmin ? 'block' : 'none';
+        function deleteApp(index) {
+            if(confirm("Confirm removal?")) {
+                apps.splice(index, 1);
+                localStorage.setItem('myApps', JSON.stringify(apps));
+                renderApps();
+            }
+        }
+
+        function renderApps() {
+            const list = document.getElementById('app-list');
+            list.innerHTML = "";
+            apps.forEach((app, index) => {
+                const div = document.createElement('div');
+                div.className = 'app-item';
+                div.innerHTML = `
+                    <button class="nav-btn" onclick="document.getElementById('main-frame').src='${app.url}'">
+                        ● &nbsp; ${app.name}
+                    </button>
+                    <button class="delete-btn" onclick="deleteApp(${index})" style="display: ${isAdmin ? 'block' : 'none'}">×</button>
+                `;
+                list.appendChild(div);
             });
         }
+        init();
     </script>
 </body>
-</html>
+</html> sửa code để khi publish trên Github dữ liệu được đông bộ
